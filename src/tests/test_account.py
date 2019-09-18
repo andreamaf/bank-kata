@@ -1,42 +1,22 @@
 
-import pytest
-from ..bank import Account
-
-
-@pytest.fixture
-def account():
-    return Account()
-
-
-@pytest.fixture
-def account_start_balance():
-    return Account(start_balance=789)
-
-
-@pytest.fixture
-def acceptance_account():
-    account = Account()
-
-    depo1 = (1000, '10/01/2012')
-    account.deposit(*depo1)
-
-    depo2 = (2000, '13/01/2012')
-    account.deposit(*depo2)
-
-    withdr1 = (500, '14/01/2012' )
-    account.withdrawal(*withdr1)
-    return account
-
-
 def test_deposit_transaction(account):
-    account.deposit(1000, '01/01/2001')
+    account.deposit(1000)
     assert account.balance == 1000
 
 
 def test_deposit_transaction_start_balance(account_start_balance):
-    account_start_balance.deposit(1000, '01/01/2001')
+    account_start_balance.deposit(1000)
     assert account_start_balance.balance == 1789
 
+
+def test_withdrawal_transaction(account):
+    account.withdrawal(1000)
+    assert account.balance == -1000
+
+
+def test_withdrawal_transaction_start_balance(account_start_balance):
+    account_start_balance.withdrawal(1000)
+    assert account_start_balance.balance == -211
 
 
 def test_transactions_history(acceptance_account):
